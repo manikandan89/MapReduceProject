@@ -9,7 +9,6 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-import mr.hw3_PageRank.PageRank.PageRankReducer;
 
 
 public class Main {
@@ -28,16 +27,16 @@ public class Main {
 		training.setMapOutputKeyClass(Text.class);
 		training.setMapOutputValueClass(BirdData.class);
 		
-		training.setReducerClass(PageRankReducer.class);
+		training.setReducerClass(TrainingModelReducer.class);
 		training.setOutputKeyClass(Text.class);
 		training.setOutputValueClass(Text.class);
 		
 		
-		FileInputFormat.addInputPath(getKeys, pathIn);
+		FileInputFormat.addInputPath(training, pathIn);
 		Path outputPath = new Path(pathOut + "KeyIndex");
-		FileOutputFormat.setOutputPath(getKeys, outputPath);
+		FileOutputFormat.setOutputPath(training, outputPath);
 		outputPath.getFileSystem(conf).delete(outputPath, true);
-		getKeys.waitForCompletion(true);
+		training.waitForCompletion(true);
 
 	}
 
